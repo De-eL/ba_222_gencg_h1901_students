@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "01" 
+title: "01_FirstSteps" 
 category: "First Steps" 
 thumb_name: "thumb.jpg"
 includes:
