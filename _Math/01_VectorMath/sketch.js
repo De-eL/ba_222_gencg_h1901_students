@@ -21,7 +21,6 @@ function setup() {
     }
   }
   spacer = 20;
-  frameRate(60);
   background(0);
 }
 
