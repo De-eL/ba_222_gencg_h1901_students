@@ -7,15 +7,12 @@
 
 twitter_username: yourname
 github_username: yourname
-title: I.BA_222_GENCG.H1901
+title: Generative Computer Graphics - Dominic Lüönd
 subtitle: I.BA_222_GENCG.H1901 - Winter 2019
 
 # # Build settings
 # markdown: kramdown
 
 collections:
-  01-Shapes:
-    output: true
-    
-  02-Agents:
+  Math:
     output: true
