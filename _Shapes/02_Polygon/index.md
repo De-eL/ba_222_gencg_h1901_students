@@ -1,7 +1,7 @@
 ---
 layout: sketch
-title: "title of the sketch" 
-category: "Experiment" 
+title: "Polygons" 
+category: "Shapes" 
 thumb_name: "thumb.jpg"
 includes:
   - src: "sketch.js"

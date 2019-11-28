@@ -1,4 +1,33 @@
 // Global var
+let threeSided;
+let fourSided;
+let fiveSided;
+let fixSided;
+let sevenSided;
+let eightSided;
+
+class xSidedPolygon {
+  constructor(sides) {
+    this.x = random(width);
+    this.y = random(height);
+    this.sides = sides;
+    this.diameter = random(10, 50);
+    this.speed = random(this.diameter, this.diameter+5);
+  }
+
+  move() {
+    this.x += random(-this.speed, this.speed);
+    this.y += random(-this.speed, this.speed);
+    if (this.x > width || this.x < 0 || this.y > height || this.y < 0) {
+      this.x = width/2;
+      this.y = height/2;
+    }
+  }
+
+  display() {
+    polygon(this.x, this.y, this.diameter/2, this.sides);
+  }
+}
  
 function setup() {
   // Canvas setup
@@ -7,10 +36,28 @@ function setup() {
   // Detect screen density (retina)
   var density = displayDensity();
   pixelDensity(density);
+
+  threeSided = new xSidedPolygon(3);
+  fourSided = new xSidedPolygon(4);
+  fiveSided = new xSidedPolygon(5);
+  fixSided = new xSidedPolygon(6);
+  sevenSided = new xSidedPolygon(7);
+  eightSided = new xSidedPolygon(8);
 }
 
 function draw() {
-
+  threeSided.move();
+  threeSided.display();
+  fourSided.move();
+  fourSided.display();
+  fiveSided.move();
+  fiveSided.display();
+  fixSided.move();
+  fixSided.display();
+  sevenSided.move();
+  sevenSided.display();
+  eightSided.move();
+  eightSided.display();
 }
 
 function polygon(x, y, radius, npoints) {
