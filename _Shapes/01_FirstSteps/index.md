@@ -1,7 +1,7 @@
 ---
 layout: sketch
-title: "Vector Math" 
-category: "Math" 
+title: "01_FirstSteps" 
+category: "First Steps" 
 thumb_name: "thumb.jpg"
 includes:
   - src: "sketch.js"
