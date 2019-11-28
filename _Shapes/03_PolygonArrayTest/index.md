@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "Polygons" 
+title: "Polygons (using Array)" 
 category: "Shapes" 
 thumb_name: "thumb.jpg"
 includes:
