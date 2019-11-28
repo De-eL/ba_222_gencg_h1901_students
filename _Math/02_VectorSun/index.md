@@ -1,7 +1,7 @@
 ---
 layout: sketch
-title: "Vector Sun" 
-category: "Math" 
+title: "Sun" 
+category: "Vector" 
 thumb_name: "thumb.jpg"
 includes:
   - src: "sketch.js"

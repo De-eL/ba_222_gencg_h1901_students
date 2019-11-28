@@ -1,7 +1,7 @@
 ---
 layout: sketch
-title: "Vector Math" 
-category: "Math" 
+title: "Field" 
+category: "Vector" 
 thumb_name: "thumb.jpg"
 includes:
   - src: "sketch.js"
