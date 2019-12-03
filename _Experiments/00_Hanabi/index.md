@@ -1,7 +1,7 @@
 ---
 layout: sketch
-title: "Randomized" 
-category: "Vector" 
+title: "Hanabi" 
+category: "Experiments" 
 thumb_name: "thumb.jpg"
 includes:
   - src: "sketch.js"
