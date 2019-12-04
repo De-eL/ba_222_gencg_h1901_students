@@ -7,7 +7,7 @@
  class rocket {
   constructor() {
     this.speed = 28;
-    this.x = random(0, width) + 50;
+    this.x = random(0, width/2) - 500;
     this.y = height+this.speed * 2;
     this.diameter = random(15, 25);
     this.hasExploded = false;
@@ -62,6 +62,7 @@
 
 function setup() {
   // Canvas setup
+  p5.disableFriendlyErrors = true;
   canvas = createCanvas(windowWidth, windowHeight-45, WEBGL);
   canvas.parent("p5Container");
   // Detect screen density (retina)
