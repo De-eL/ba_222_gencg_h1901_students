@@ -19,7 +19,7 @@
     ellipse(this.x, this.y, this.diameter, 2 * this.diameter);
   }
   explode() {
-    for (let i = 0; i < random(0, 10) + 10; i++) {
+    for (let i = 0; i < random(0, 50) + 50; i++) {
       particleArray[i] = new particle(this.x, this.y);
       console.log(particleArray[i]);
     }
@@ -32,10 +32,13 @@
     this.y = y;
     this.d = random(4, 6);
     this.vx = random(-2, 2);
+    this.vy = random(1, 3);
     this.duration = random(1, 3);
   }
   move() {
     this.x += this.vx;
+    this.y -= this.vy;
+    this.vy -= 0.05;
   }
   display() {
     fill(204, 101, 192, 127);
