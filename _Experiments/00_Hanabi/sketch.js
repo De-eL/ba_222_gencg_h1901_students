@@ -7,7 +7,7 @@
  class rocket {
   constructor() {
     this.speed = 28;
-    this.x = random(0, width/2) - 500;
+    this.x = random(0, width/1.5) - 500;
     this.y = height+this.speed * 2;
     this.diameter = random(15, 25);
     this.hasExploded = false;
@@ -76,11 +76,12 @@ function draw() {
   ambientLight(255);
   directionalLight(55, 0, 0, 0.25, 0.25, 0);
   rocketCooldown-=1;
-  console.log(rocketArray.length + " rockets.");
-  console.log(particleArray.length + " particles.");
+
   if (rocketCooldown < 0) {
     rocketArray.push(new rocket());
     rocketCooldown = 30;
+    console.log(rocketArray.length + " rockets.");
+    console.log(particleArray.length + " particles.");
   }
   for (let rocket of rocketArray) {
     rocket.move();
