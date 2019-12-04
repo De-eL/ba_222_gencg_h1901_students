@@ -2,7 +2,7 @@
   let rocketArray = [];
   let particleArray = [];
   let hasRun = false;
-  var rocketCooldown = 50;
+  var rocketCooldown = 30;
 
  class rocket {
   constructor() {
@@ -22,8 +22,10 @@
   }
   explode() {
     for (let i = 0; i < random(0, 50) + 50; i++) {
-      particleArray[i] = new particle(this.x, this.y);
+      particleArray.push(new particle(this.x, this.y));
     }
+    let index = rocketArray.indexOf(this);
+    rocketArray.splice(index, 1);
   }
  }
 
@@ -51,6 +53,10 @@
     stroke(127, 63, 120);
     ellipse(this.x, this.y, this.d);
     this.d *= 0.985;
+    if (this.d < 0.1) {
+      let index = particleArray.indexOf(this);
+      particleArray.splice(index, 1);
+    }
   }
  }
 
@@ -69,31 +75,27 @@ function draw() {
   ambientLight(255);
   directionalLight(55, 0, 0, 0.25, 0.25, 0);
   rocketCooldown-=1;
+  console.log(rocketArray.length + " rockets.");
+  console.log(particleArray.length + " particles.");
   if (rocketCooldown < 0) {
     rocketArray.push(new rocket());
-    rocketCooldown = 50;
+    rocketCooldown = 30;
   }
-  for (var i = 0; i <= rocketArray.length - 1; i++) { 
-    rocketArray[i].move();
-    rocketArray[i].display();
-    rocketArray[i].speed *= 0.97;
-    rocketArray[i].diameter *= 0.98;
-    if (rocketArray[i].speed < 0.25 && !rocketArray[i].hasExploded) {
-      rocketArray[i].explode();
-      rocketArray[i].hasExploded = true;
+  for (let rocket of rocketArray) {
+    rocket.move();
+    rocket.display();
+    rocket.speed *= 0.97;
+    rocket.diameter *= 0.98;
+    if (rocket.speed < 0.25 && !rocket.hasExploded) {
+      rocket.explode();
+      rocket.hasExploded = true;
     }
   }
-
-
 
   if (particleArray.length > 0) {
   for (var i = 0; i <= particleArray.length - 1; i++) {
     particleArray[i].move();
     particleArray[i].display();
-    particleArray[i].duration -= 1;
-    if (particleArray[i].duration < 0) {
-      
-    }
   }
 }
 }
