@@ -1,0 +1,130 @@
+// Global var
+  let rocketArray = [];
+  let particleArray = [];
+  let hasRun = false;
+  var rocketCooldown = 25;
+
+ class rocket {
+  constructor() {
+    this.speed = height / random(25, 45);
+    this.x = random(-width, +width);
+    this.y = height+this.speed * 2;
+    this.diameter = width/random(100, 200);
+    this.hasExploded = false;
+  }
+  move() {
+    this.y -= this.speed;
+  }
+  display() {
+    fill(204, 101, 192, 127);
+    stroke(127, 63, 120);
+    ellipse(this.x, this.y, this.diameter, 2 * this.diameter);
+  }
+  explode() {
+    for (let i = 0; i < random(0, 50) + 50; i++) {
+      particleArray.push(new particle(this.x, this.y));
+    }
+    let index = rocketArray.indexOf(this);
+    rocketArray.splice(index, 1);
+  }
+ }
+
+ class particle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.d = width / random(150, 250);
+    this.vx = random(-width/1500, width/1500);
+    this.vy = random(width/3000, width/1000);
+  }
+  move() {
+    this.x += this.vx;
+    this.y -= this.vy;
+    this.vy -= 0.05;
+    if (this.vx < -0.1) {
+      this.vx += 0.005;
+    }
+    if (this.vx > 0.1) {
+      this.vx -= 0.005;
+    }
+  }
+  display() {
+    fill(204, 101, 192, 127);
+    stroke(127, 63, 120);
+    ellipse(this.x, this.y, this.d);
+    this.d *= 0.985;
+    if (this.d < 0.1) {
+      let index = particleArray.indexOf(this);
+      particleArray.splice(index, 1);
+    }
+  }
+ }
+
+function setup() {
+  // Canvas setup
+  p5.disableFriendlyErrors = true;
+  canvas = createCanvas(windowWidth, windowHeight-45, WEBGL);
+  canvas.parent("p5Container");
+  // Detect screen density (retina)
+  var density = displayDensity();
+  pixelDensity(density);
+  rocketArray.push(new rocket());
+}
+
+function draw() {
+  background(0);
+  ambientLight(255);
+  directionalLight(55, 0, 0, 0.25, 0.25, 0);
+  rocketCooldown-=1;
+
+  if (rocketCooldown < 0) {
+    rocketArray.push(new rocket());
+    rocketCooldown = 25;
+    console.log(rocketArray.length + " rockets.");
+    console.log(particleArray.length + " particles.");
+  }
+  for (let rocket of rocketArray) {
+    rocket.move();
+    rocket.display();
+    rocket.speed *= 0.97;
+    rocket.diameter *= 0.98;
+    if (rocket.speed < 0.45 && !rocket.hasExploded) {
+      rocket.explode();
+      rocket.hasExploded = true;
+    }
+  }
+
+  if (particleArray.length > 0) {
+  for (var i = 0; i <= particleArray.length - 1; i++) {
+    particleArray[i].move();
+    particleArray[i].display();
+  }
+}
+}
+
+function keyPressed() {
+  if (key == 's' || key == 'S') saveThumb(650, 350);
+}
+
+// Tools
+
+// resize canvas when the window is resized
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight, false);
+}
+
+// Int conversion
+function toInt(value) {
+  return ~~value;
+}
+
+// Timestamp
+function timestamp() {
+  return Date.now();
+}
+
+// Thumb
+function saveThumb(w, h) {
+  let img = get( width/2-w/2, height/2-h/2, w, h);
+  save(img,'thumb.jpg');
+}
