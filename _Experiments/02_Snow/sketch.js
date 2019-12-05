@@ -61,7 +61,7 @@ class Point {
 
 class Snowflake {
   constructor(numberOfEdges, x, y) {
-    this.numberOfEdges = numberOfEdges + random(-1, 1);
+    this.numberOfEdges = numberOfEdges;
     this.oneStepDegrees = 360/numberOfEdges;
     this.pointArray = [];
     this.pointArray.push(new Point(x, y));
@@ -71,19 +71,19 @@ class Snowflake {
   }
 
   drawNext() {
-    if (this.pointArray.length > 1200) {
+    if (this.pointArray.length > 1000) {
       this.stopIt = true;
     }
     if (this.stopIt == false) {
       this.pointArray.forEach(element => {
         fill(255, 255, 255);
         stroke(255, 255, 255);
-        ellipse(element.x, element.y, width/200);
+        ellipse(element.x, element.y, width/400);
         let v0 = createVector(element.x, element.y);
-        let v1 = createVector(width/10/(this.currentLevel/2) + random(0, 100), 0);
+        let v1 = createVector(width/15/(this.currentLevel/2) + random(15, width/200), 0);
         for (let i = 0; i < this.numberOfEdges; i++) {  
           drawLine(v0, v1, "White", radians(this.oneStepDegrees));
-          if (random(0, 10) > 3) {
+          if (random(0, 100) + this.currentLevel > 20) {
             snowFlake.pointArray.push(new Point(v1.x+element.x, v1.y+element.y));
           }
         }
@@ -97,7 +97,7 @@ class Snowflake {
 function drawLine(base, vec, myColor, rotation) {
   push();
   stroke(myColor);
-  strokeWeight(3);
+  strokeWeight(2);
   fill(myColor);
   translate(base.x, base.y);
   vec.rotate(rotation);
