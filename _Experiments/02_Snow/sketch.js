@@ -84,10 +84,12 @@ class Snowflake {
         for (let i = 0; i < this.numberOfEdges; i++) {  
           drawLine(v0, v1, "White", radians(this.oneStepDegrees));
           if (random(0, 100) + this.currentLevel > 20) {
+            
             snowFlake.pointArray.push(new Point(v1.x+element.x, v1.y+element.y));
           }
         }
         this.currentLevel -= -1; 
+        
       });
     }
 
