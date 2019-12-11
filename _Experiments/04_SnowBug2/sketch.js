@@ -11,9 +11,9 @@ function setup() {
   // Detect screen density (retina)
   var density = displayDensity();
   pixelDensity(density);
-  snowFlake = new Snowflake(5 ,width/2, height/2);
+  snowFlake = new Snowflake(8 ,width/2, height/2);
   background(0);
-  frameRate(1);
+  frameRate(2);
 }
 
 function draw() {
@@ -71,18 +71,18 @@ class Snowflake {
   }
 
   drawNext() {
-    if (this.pointArray.length > 500) {
+    if (this.pointArray.length > 6000) {
       this.stopIt = true;
     }
     if (this.stopIt == false) {
       this.pointArray.forEach(element => {
         fill(255, 255, 255);
         stroke(255, 255, 255);
-        ellipse(element.x, element.y, width/200);
+        ellipse(element.x, element.y, width/400);
         let v0 = createVector(element.x, element.y);
-        let v1 = createVector(element.x, 0);
+        let v1 = createVector(element.x / 4 , 0);
         for (let i = 0; i < this.numberOfEdges; i++) {  
-          drawLine(v0, v1, "White", radians(this.oneStepDegrees));
+          drawLine(v0, v1, random(150), radians(this.oneStepDegrees));
           snowFlake.pointArray.push(new Point(nextX, nextY));
         }
         console.log(this.pointArray.length);
@@ -96,7 +96,7 @@ class Snowflake {
 function drawLine(base, vec, myColor, rotation) {
   push();
   stroke(myColor);
-  strokeWeight(3);
+  strokeWeight(2);
   fill(myColor);
   translate(base.x, base.y);
   vec.rotate(rotation);
