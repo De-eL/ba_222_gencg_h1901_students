@@ -49,7 +49,7 @@ function drawMountain(counter, color) {
   for (var x = 0; x < width; x++) {
     var y = noise(xoff) * 800 + height / 8 * counter;
     vertex(x, y)
-    xoff += inc1 / (counter * 2)  
+    xoff += inc1 // / (counter * 2)  
   }
   vertex(width, noise(xoff) * (800 - (100 * counter)))
   vertex(width, height)
