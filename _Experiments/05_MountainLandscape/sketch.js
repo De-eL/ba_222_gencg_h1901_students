@@ -18,7 +18,7 @@ function setup() {
   o2 = color(80, 235, 186, 155);
   backgroundcolor = color(118,105,128); // mousy wisteria
   mountain1color = color(59,52,41); // thousand year old brown
-  mountain2color = color(83,74,50); // rikan brown
+  mountain2color = color(73,74,50); // rikan brown
   mountain3color = color(77,75,58); // swooty willow bamboo
   mountain4color = color(69,77,50); // pine needle color
   mountain5color = color(82,89,59); // blue black crayfish
@@ -49,7 +49,7 @@ function drawMountain(counter, color) {
   for (var x = 0; x < width; x++) {
     var y = noise(xoff) * 800 + height / 8 * counter;
     vertex(x, y)
-    xoff += inc1
+    xoff += inc1 / (counter * 2)  
   }
   vertex(width, noise(xoff) * (800 - (100 * counter)))
   vertex(width, height)
