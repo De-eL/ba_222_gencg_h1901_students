@@ -71,7 +71,7 @@ class Snowflake {
   }
 
   drawNext() {
-    if (this.pointArray.length > 500) {
+    if (this.pointArray.length > 6000) {
       this.stopIt = true;
     }
     if (this.stopIt == false) {
