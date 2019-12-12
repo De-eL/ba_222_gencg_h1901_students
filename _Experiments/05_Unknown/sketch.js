@@ -36,7 +36,7 @@ class Particle {
     }
   }
   randomParameter() {
-    this.amplitude = random(60);
+    this.amplitude = random(height/64);
     this.xDir = random(360);
     this.yDir = random(360);
     this.omega = randomGaussian() * .5;
