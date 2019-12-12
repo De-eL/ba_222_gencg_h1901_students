@@ -132,3 +132,12 @@ function draw() {
   rect(0, 0, width, height);
   system.run();
 }
+
+// Thumb
+function saveThumb(w, h) {
+  let img = get( width/2-w/2, height/2-h/2, w, h);
+  save(img,'thumb.jpg');
+}
+function keyPressed() {
+  if (key == 's' || key == 'S') saveThumb(650, 350);
+}
