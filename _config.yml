@@ -20,3 +20,5 @@ collections:
     output: true
   Experiments:
     output: true
+  6640x3840:
+    output: true
