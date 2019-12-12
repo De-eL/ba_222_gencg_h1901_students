@@ -1,4 +1,8 @@
-var inc1 = 0.0019;
+var inc1;
+var inc2;
+var inc3;
+var inc4;
+var inc5;
 var start = 0;
 const xAxis = 2;
 const yAxis = 1;
@@ -16,18 +20,21 @@ function setup() {
   b2 = color(80, 235, 186, 155);
   o1 = color(255, 255, 255, 0);
   o2 = color(80, 235, 186, 155);
+
+  inc1 = height / 426666.666 // 0.0090;
+  inc2 = height / 548571.428 // 0.0070;
+  inc3 = height / 768000  // 0.0050;
+  inc4 = height / 1280000   // 0.0030;
+  inc5 = height / 3840000  // 0.0010; 
+
   backgroundcolor = color(118,105,128); // mousy wisteria
-  mountain1color = color(59,52,41); // thousand year old brown
-  mountain2color = color(73,74,50); // rikan brown
+  mountain1color = color(69,62,51); // thousand year old brown
+  mountain2color = color(63,64,40); // rikan brown
   mountain3color = color(77,75,58); // swooty willow bamboo
   mountain4color = color(69,77,50); // pine needle color
   mountain5color = color(82,89,59); // blue black crayfish
 
   background(backgroundcolor);
-  noLoop();
-}
-
-function draw() {
   drawMountain(1, mountain1color);
   setGradient(0, 400, width, height, o1, o2, yAxis);
   drawMountain(2, mountain2color);
@@ -40,18 +47,39 @@ function draw() {
   setGradient(0, 400, width, height, o1, o2, yAxis);
 }
 
+function draw() {
+
+}
+
 function drawMountain(counter, color) {
   //setGradient(0, 0, width, height, m1, m2, yAxis); //Mtns
   noStroke();
   fill(color);
   beginShape();
-  var xoff = start + 100 * counter;
-  for (var x = 0; x < width; x++) {
-    var y = noise(xoff) * 800 + height / 8 * counter;
+  var xoff = start - height / 38.4 * counter;
+  for (var x = 0; x <= width; x+=10) {
+    var y = noise(xoff) * height / 6.4 + height / 10 * counter;
     vertex(x, y)
-    xoff += inc1 // / (counter * 2)  
+    switch (counter) {
+      case 1:
+        xoff += inc1 
+        break;
+      case 2:
+        xoff += inc2 
+        break;
+      case 3:
+        xoff += inc3
+        break;
+      case 4:
+        xoff += inc4
+        break;
+      case 5:
+        xoff += inc5
+        break;
+      default:
+        break;
+    } 
   }
-  vertex(width, noise(xoff) * (800 - (100 * counter)))
   vertex(width, height)
   vertex(0, height)
   endShape();
