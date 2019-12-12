@@ -6,7 +6,6 @@ var inc5;
 var start = 0;
 const xAxis = 2;
 const yAxis = 1;
-var m1, m2, b1, b2; 
 
 function setup() {
   p5.disableFriendlyErrors = true;
@@ -14,10 +13,6 @@ function setup() {
   canvas.parent("p5Container");
   var density = displayDensity();
   pixelDensity(density);
-  m1 = color(119, 164, 76, 150); // 104,134,90
-  m2 = color(218, 100, 43);
-  b1 = color(191, 43, 70, 150);
-  b2 = color(80, 235, 186, 155);
   o1 = color(255, 255, 255, 0);
   o2 = color(80, 235, 186, 155);
 
@@ -57,8 +52,8 @@ function drawMountain(counter, color) {
   fill(color);
   beginShape();
   var xoff = start - height / 38.4 * counter;
-  for (var x = 0; x <= width; x+=10) {
-    var y = noise(xoff) * height / 6.4 + height / 10 * counter;
+  for (var x = 0; x <= width; x+=height/384) {
+    var y = noise(xoff) * height / 6.4 + height / (height / 384) * counter;
     vertex(x, y)
     switch (counter) {
       case 1:

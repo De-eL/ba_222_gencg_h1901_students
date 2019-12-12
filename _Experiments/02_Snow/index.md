@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "title of the sketch" 
+title: "Snow/Flower Generation Test" 
 category: "Experiment" 
 thumb_name: "thumb.jpg"
 includes:
