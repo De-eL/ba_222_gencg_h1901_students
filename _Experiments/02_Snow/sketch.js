@@ -22,6 +22,7 @@ function draw() {
 }
 
 function keyPressed() {
+  if (keyCode === 32) setup(); // 32 = Space
   if (key == 's' || key == 'S') saveThumb(650, 350);
 }
 
