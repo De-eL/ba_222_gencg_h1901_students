@@ -1,140 +1,125 @@
-let system;
-let particles = [];
+// Global var
+let rocketArray = [];
+let particleArray = [];
+let hasRun = false;
+var rocketCooldown = 30;
 
-class Particle {
-  constructor(x, y, r, c1, c2, c3) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.amplitude;
-    this.xDir;
-    this.yDir;
-    this.omega;
-    this.xVel;
-    this.yVel;
-    this.hasExploded = false;
-    this.c1 = c1
-    this.c2 = c2
-    this.c3 = c3
-  }
-  boundaryConstraints() {
-    if (this.x < 0) {
-      this.x = 0;
-      this.xVel *= -1;
-    }
-    if (this.x > width) {
-      this.x = width;
-      this.xVel *= -1;
-    }
-    if (this.y < 0) {
-      this.y = 0;
-      this.yVel *= -1;
-    }
-    if (this.y > height) {
-      this.y = height;
-      this.yVel *= -1;
-    }
-  }
-  randomParameter() {
-    this.amplitude = random(height/64);
-    this.xDir = random(360);
-    this.yDir = random(360);
-    this.omega = randomGaussian() * .5;
-  }
-  move() {
-    if (this.r <= 0 && system.numParticles < 60 && !this.hasExploded) {
-      this.hasExploded = true;
-      this.explode(this.x, this.y);
-    }
-    this.xVel = cos(radians(this.xDir) * (noise(1) * 40)) * this.amplitude;
-    this.yVel = sin(radians(this.yDir) * (noise(1) * 40)) * this.amplitude;
-    this.x += this.xVel;
-    this.y += this.yVel;
-    this.xDir += this.omega;
-    this.yDir += this.omega;
-    if (this.r != 0) {
-      this.r += random(-6, 5);
-    }
-    if (this.r <= 0) {
-      this.r = 0;
-    }  
-    this.boundaryConstraints();  
+class rocket {
+constructor() {
+  this.speed = 28;
+  this.x = random(0, width/1.5) - 500;
+  this.y = height+this.speed * 2;
+  this.diameter = random(15, 25);
+  this.hasExploded = false;
 }
-  display() {
-    colorMode(HSB, 360, 200, 100);
-    noStroke();
-    fill(this.c1);
-    ellipse(this.x, this.y, this.r, this.r);
-    fill(this.c2);
-    ellipse(this.x, this.y, this.r / 2, this.r / 2);
-    fill(this.c3);
-    ellipse(this.x, this.y, this.r / 4, this.r / 4);
+move() {
+  this.y -= this.speed;
+}
+display() {
+  fill(204, 101, 192, 127);
+  stroke(127, 63, 120);
+  ellipse(this.x, this.y, this.diameter, 2 * this.diameter);
+}
+explode() {
+  for (let i = 0; i < random(0, 50) + 50; i++) {
+    particleArray.push(new particle(this.x, this.y));
   }
-  explode(x, y) {
-    let r0 = random(2, 3);
-    system.numParticles += r0;
-    let r1 = random(width / 4, width / 4 * 2);
-    let r2 = random(height / 4, height / 4 * 2);
-    let temp = []
-    for (let i = 0; i < r0; i++) {
-      colorMode(HSB, 360, 200, 100);
-      let color1 = color(50+random(-10,10), 100+random(-10,10), 100+random(-10,10));
-      let color2 = color(50+random(-10,10), 50+random(-10,10), 100+random(-10,10));
-      let color3 = color(50+random(-10,10),10+random(-10,10), 100+random(-10,10));
-      temp[i] = new Particle(r1, r2, 75 + random(-25, 25), color1, color2, color3)
-      temp[i].randomParameter();
-      particles.push(temp[i]);
-    }
-  }
+  let index = rocketArray.indexOf(this);
+  rocketArray.splice(index, 1);
+}
 }
 
-class ParticleSystem {
-  constructor(numParticles) {
-    this.numParticles = numParticles;
-    colorMode(HSB, 360, 200, 100);
-    this.c1 = color(50, 100, 100);
-    this.c2 = color(50, 50, 100);
-    this.c3 = color(50, 10, 100);
-    for (let i = 0; i < numParticles; i++) {
-      particles[i] = new Particle(random(width / 8, width / 4 * 2), random(height / 4, height / 4 * 2), 75, this.c1, this.c2, this.c3)
-      particles[i].randomParameter();
-    }
+class particle {
+constructor(x, y) {
+  this.x = x;
+  this.y = y;
+  this.d = random(4, 6);
+  this.vx = random(-2, 2);
+  this.vy = random(1, 3);
+}
+move() {
+  this.x += this.vx;
+  this.y -= this.vy;
+  this.vy -= 0.05;
+  if (this.vx < -0.1) {
+    this.vx += 0.005;
   }
-  run() {
-    for (let i = 0; i < this.numParticles; i++) {
-      particles[i].move();
-      particles[i].display();
-    }
+  if (this.vx > 0.1) {
+    this.vx -= 0.005;
   }
+}
+display() {
+  fill(204, 101, 192, 127);
+  stroke(127, 63, 120);
+  ellipse(this.x, this.y, this.d);
+  this.d *= 0.985;
+  if (this.d < 0.1) {
+    let index = particleArray.indexOf(this);
+    particleArray.splice(index, 1);
+  }
+}
 }
 
 function setup() {
-  p5.disableFriendlyErrors = true;
-  canvas = createCanvas(windowWidth, windowHeight - 45);
-  canvas.parent("p5Container");
-  var density = displayDensity();
-  pixelDensity(density);
-
-  backgroundcolor = color(118, 105, 128); // mousy wisteria
-  mountain1color = color(69, 62, 51); // thousand year old brown
-  mountain2color = color(63, 64, 40); // rikan brown
-  mountain3color = color(77, 75, 58); // swooty willow bamboo
-  mountain4color = color(69, 77, 50); // pine needle color
-  mountain5color = color(82, 89, 59); // blue black crayfish
-
-  system = new ParticleSystem(15);
-
-  frameRate(60);
+// Canvas setup
+p5.disableFriendlyErrors = true;
+canvas = createCanvas(windowWidth, windowHeight-45, WEBGL);
+canvas.parent("p5Container");
+// Detect screen density (retina)
+var density = displayDensity();
+pixelDensity(density);
+rocketArray.push(new rocket());
 }
 
 function draw() {
-  fill('rgba(196,6,126, 0.20)')
-  rect(0, 0, width, height);
-  system.run();
+background(0);
+ambientLight(255);
+directionalLight(55, 0, 0, 0.25, 0.25, 0);
+rocketCooldown-=1;
+
+if (rocketCooldown < 0) {
+  rocketArray.push(new rocket());
+  rocketCooldown = 30;
+  console.log(rocketArray.length + " rockets.");
+  console.log(particleArray.length + " particles.");
+}
+for (let rocket of rocketArray) {
+  rocket.move();
+  rocket.display();
+  rocket.speed *= 0.97;
+  rocket.diameter *= 0.98;
+  if (rocket.speed < 0.25 && !rocket.hasExploded) {
+    rocket.explode();
+    rocket.hasExploded = true;
+  }
 }
 
-// Thumb
-function saveThumb(w, h) {
-  let img = get( width/2-w/2, height/2-h/2, w, h);
-  save(img,'thumb.jpg');
+if (particleArray.length > 0) {
+for (var i = 0; i <= particleArray.length - 1; i++) {
+  particleArray[i].move();
+  particleArray[i].display();
+}
+}
+}
+
+function keyPressed() {
+if (keyCode === 32) setup(); // 32 = Space
+if (key == 's' || key == 'S') saveThumb(650, 350);
+}
+
+// Tools
+
+// resize canvas when the window is resized
+function windowResized() {
+resizeCanvas(windowWidth, windowHeight, false);
+}
+
+// Int conversion
+function toInt(value) {
+return ~~value;
+}
+
+// Timestamp
+function timestamp() {
+return Date.now();
 }
