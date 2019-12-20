@@ -16,7 +16,7 @@ move() {
   this.y -= this.speed;
 }
 display() {
-  fill(204, 101, 192, 127);
+  fill(234, 151, 192);
   stroke(127, 63, 120);
   ellipse(this.x, this.y, this.diameter, 2 * this.diameter);
 }
