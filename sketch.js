@@ -2,7 +2,7 @@
 let rocketArray = [];
 let particleArray = [];
 let hasRun = false;
-var rocketCooldown = 30;
+var rocketCooldown = 25;
 
 class rocket {
 constructor() {
@@ -21,7 +21,7 @@ display() {
   ellipse(this.x, this.y, this.diameter, 2 * this.diameter);
 }
 explode() {
-  for (let i = 0; i < random(0, 50) + 50; i++) {
+  for (let i = 0; i < random(0, 25) + 50; i++) {
     particleArray.push(new particle(this.x, this.y));
   }
   let index = rocketArray.indexOf(this);
@@ -49,7 +49,7 @@ move() {
   }
 }
 display() {
-  fill(204 + random(-20, 20), 101 + random(0, 50), 192, 127 + random(-50, 50));
+  fill(204 + random(-20, 20), 101 + random(-10, 50));
   stroke(127, 63, 120);
   ellipse(this.x, this.y, this.d);
   this.d *= 0.985;
@@ -77,7 +77,7 @@ rocketCooldown-=1;
 
 if (rocketCooldown < 0) {
   rocketArray.push(new rocket());
-  rocketCooldown = 30;
+  rocketCooldown = 35;
   console.log(rocketArray.length + " rockets.");
   console.log(particleArray.length + " particles.");
 }
