@@ -72,9 +72,7 @@ rocketArray.push(new rocket());
 }
 
 function draw() {
-background(0);
-ambientLight(255);
-directionalLight(55, 0, 0, 0.25, 0.25, 0);
+background('rgba(196,6,126, 0.20)');
 rocketCooldown-=1;
 
 if (rocketCooldown < 0) {
