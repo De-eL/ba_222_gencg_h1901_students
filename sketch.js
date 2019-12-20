@@ -1,104 +1,140 @@
-// Noise generated circle
+let system;
+let particles = [];
 
-// Global var
-// Some of the var might be initialised in gui.js
-var canvas, backgroundGrey, radius;
-var actRandomSeed, count, points, increment;
+class Particle {
+  constructor(x, y, r, c1, c2, c3) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.amplitude;
+    this.xDir;
+    this.yDir;
+    this.omega;
+    this.xVel;
+    this.yVel;
+    this.hasExploded = false;
+    this.c1 = c1
+    this.c2 = c2
+    this.c3 = c3
+  }
+  boundaryConstraints() {
+    if (this.x < 0) {
+      this.x = 0;
+      this.xVel *= -1;
+    }
+    if (this.x > width) {
+      this.x = width;
+      this.xVel *= -1;
+    }
+    if (this.y < 0) {
+      this.y = 0;
+      this.yVel *= -1;
+    }
+    if (this.y > height) {
+      this.y = height;
+      this.yVel *= -1;
+    }
+  }
+  randomParameter() {
+    this.amplitude = random(height/64);
+    this.xDir = random(360);
+    this.yDir = random(360);
+    this.omega = randomGaussian() * .5;
+  }
+  move() {
+    if (this.r <= 0 && system.numParticles < 60 && !this.hasExploded) {
+      this.hasExploded = true;
+      this.explode(this.x, this.y);
+    }
+    this.xVel = cos(radians(this.xDir) * (noise(1) * 40)) * this.amplitude;
+    this.yVel = sin(radians(this.yDir) * (noise(1) * 40)) * this.amplitude;
+    this.x += this.xVel;
+    this.y += this.yVel;
+    this.xDir += this.omega;
+    this.yDir += this.omega;
+    if (this.r != 0) {
+      this.r += random(-6, 5);
+    }
+    if (this.r <= 0) {
+      this.r = 0;
+    }  
+    this.boundaryConstraints();  
+}
+  display() {
+    colorMode(HSB, 360, 200, 100);
+    noStroke();
+    fill(this.c1);
+    ellipse(this.x, this.y, this.r, this.r);
+    fill(this.c2);
+    ellipse(this.x, this.y, this.r / 2, this.r / 2);
+    fill(this.c3);
+    ellipse(this.x, this.y, this.r / 4, this.r / 4);
+  }
+  explode(x, y) {
+    let r0 = random(2, 3);
+    system.numParticles += r0;
+    let r1 = random(width / 4, width / 4 * 2);
+    let r2 = random(height / 4, height / 4 * 2);
+    let temp = []
+    for (let i = 0; i < r0; i++) {
+      colorMode(HSB, 360, 200, 100);
+      let color1 = color(50+random(-10,10), 100+random(-10,10), 100+random(-10,10));
+      let color2 = color(50+random(-10,10), 50+random(-10,10), 100+random(-10,10));
+      let color3 = color(50+random(-10,10),10+random(-10,10), 100+random(-10,10));
+      temp[i] = new Particle(r1, r2, 75 + random(-25, 25), color1, color2, color3)
+      temp[i].randomParameter();
+      particles.push(temp[i]);
+    }
+  }
+}
+
+class ParticleSystem {
+  constructor(numParticles) {
+    this.numParticles = numParticles;
+    colorMode(HSB, 360, 200, 100);
+    this.c1 = color(50, 100, 100);
+    this.c2 = color(50, 50, 100);
+    this.c3 = color(50, 10, 100);
+    for (let i = 0; i < numParticles; i++) {
+      particles[i] = new Particle(random(width / 8, width / 4 * 2), random(height / 4, height / 4 * 2), 75, this.c1, this.c2, this.c3)
+      particles[i].randomParameter();
+    }
+  }
+  run() {
+    for (let i = 0; i < this.numParticles; i++) {
+      particles[i].move();
+      particles[i].display();
+    }
+  }
+}
 
 function setup() {
-  // Canvas setup
-  canvas = createCanvas(windowWidth, windowHeight);
+  p5.disableFriendlyErrors = true;
+  canvas = createCanvas(windowWidth, windowHeight - 45);
   canvas.parent("p5Container");
-  // Detect screen density (retina)
-  // Comment it out if the sketch is too slow
   var density = displayDensity();
   pixelDensity(density);
-  // Init var
-  // some of the var are initialised in gui.js
-  backgroundGrey = 0;
-  count = 150;
-  points = [count];
-  background(backgroundGrey);
-  radius = 20;
-  increment = +1;
+
+  backgroundcolor = color(118, 105, 128); // mousy wisteria
+  mountain1color = color(69, 62, 51); // thousand year old brown
+  mountain2color = color(63, 64, 40); // rikan brown
+  mountain3color = color(77, 75, 58); // swooty willow bamboo
+  mountain4color = color(69, 77, 50); // pine needle color
+  mountain5color = color(82, 89, 59); // blue black crayfish
+
+  system = new ParticleSystem(15);
+
+  frameRate(60);
 }
 
 function draw() {
-  // background(backgroundGrey, 20);
-  smooth();
-
-  // Create points array
-  let faderX = .1;
-  let t = millis()/1000;
-  // let r = map(mouseY,0,height,10,radius);
-  if (radius>width/1.7 && radius>height/1.7) increment = -increment;
-  else if (radius<20) increment = -increment;
-  radius += increment; 
-  let angle = radians(360/count);
-
-  for (let i=0; i<count; i++){
-    let radiusRand = radius - noise(t, i*faderX)*50;
-    let x = width/2 + cos(angle*i)*radiusRand;
-    let y = height/2 + sin(angle*i)*radiusRand;
-    points[i] = createVector(x,y);
-  }
-
-  // Draw
-  // stroke(noise(t/10)*255,0,noise(t/1)*100,255);
-  strokeHsluv(noise(t/10)*360,noise(t/20)*50,noise(t)*80);
-  strokeWeight(20);
-  noFill();
-  beginShape();
-  for (let i=0; i<count; i++){
-    // fill(255);
-    // ellipse(points[i].x, points[i].y,2,2);
-    // noFill();
-    curveVertex(points[i].x, points[i].y);
-    if (i==0 || i==count-1) curveVertex(points[i].x, points[i].y);
-  }
-  endShape(CLOSE);
-}
-
-function keyPressed() {
-  if (key == DELETE || key == BACKSPACE) background(360);  
-  if (key == 's' || key == 'S') saveThumb(650, 350);
-}
-
-// Color functions
-function fillHsluv(h, s, l) {
-  var rgb = hsluv.hsluvToRgb([h, s, l]);
-  fill(rgb[0] * 255, rgb[1] * 255, rgb[2] * 255);
-}
-
-function strokeHsluv(h, s, l) {
-  var rgb = hsluv.hsluvToRgb([h, s, l]);
-  stroke(rgb[0] * 255, rgb[1] * 255, rgb[2] * 255);
-}
-
-function colorHsluv(h, s, l) {
-  var rgb = hsluv.hsluvToRgb([h, s, l]);
-  return color(rgb[0] * 255, rgb[1] * 255, rgb[2] * 255);
-}
-
-// Tools
-
-// resize canvas when the window is resized
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight, false);
-}
-
-//  conversion
-function toInt(value) {
-  return ~~value;
-}
-
-// Timestamp
-function timestamp() {
-  return Date.now();
+  fill('rgba(196,6,126, 0.20)')
+  rect(0, 0, width, height);
+  system.run();
 }
 
 // Thumb
 function saveThumb(w, h) {
-  let img = get(width / 2 - w / 2, height / 2 - h / 2, w, h);
-  save(img, 'thumb.jpg');
+  let img = get( width/2-w/2, height/2-h/2, w, h);
+  save(img,'thumb.jpg');
 }
