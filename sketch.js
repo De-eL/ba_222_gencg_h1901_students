@@ -6,7 +6,7 @@ var rocketCooldown = 30;
 
 class rocket {
 constructor() {
-  this.speed = 28;
+  this.speed = 28 + random(-13, 5);
   this.x = random(0, width/1.5) - 500;
   this.y = height+this.speed * 2;
   this.diameter = random(15, 25);
