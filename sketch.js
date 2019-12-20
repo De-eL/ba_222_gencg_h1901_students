@@ -9,7 +9,7 @@ constructor() {
   this.speed = 28 + random(-13, 5);
   this.x = random(0, width/1.5) - 500;
   this.y = height+this.speed * 2;
-  this.diameter = random(15, 25);
+  this.diameter = random(5, 15);
   this.hasExploded = false;
 }
 move() {
@@ -18,7 +18,7 @@ move() {
 display() {
   fill(234, 151, 192);
   stroke(127, 63, 120);
-  ellipse(this.x, this.y, this.diameter, 2 * this.diameter);
+  ellipse(this.x, this.y, this.diameter, 3 * this.diameter);
 }
 explode() {
   for (let i = 0; i < random(0, 25) + 50; i++) {
