@@ -49,7 +49,7 @@ move() {
   }
 }
 display() {
-  fill(204 + random(-20, 20), 101 + random(-10, 50));
+  fill(204 + random(-20, 20), 101 + random(-10, 50), 194);
   stroke(127, 63, 120);
   ellipse(this.x, this.y, this.d);
   this.d *= 0.985;
